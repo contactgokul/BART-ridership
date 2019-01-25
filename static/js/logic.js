@@ -21,7 +21,7 @@ function createMap(bartStations) {
   // Create the map object with options
   var map = L.map("map-id", {
     center: [37.8037, -122.2714],
-    zoom: 10,
+    zoom: 11,
     layers: [lightmap, bartStations]
   });
 
@@ -44,8 +44,12 @@ function createMarkers(response) {
     var station = stations[index];
 
     // For each station, create a marker and bind a popup with the station's name
-    var bartMarker = L.marker([station.gtfs_latitude, station.gtfs_longitude])
-      .bindPopup("<h3>" + station.name + "<h3><h3>Address: " + station.address + "<h3>");
+    var bartMarker = L.circle([station.gtfs_latitude, station.gtfs_longitude], {
+      color: "blue",
+      fillColor: "green",
+      fillOpacity: 0.75,
+      radius: 250
+    }).bindPopup("<h3>" + station.name + "<h3><h3> " + station.abbr + "<h3>");
 
     // Add the marker to the bartMarkers array
     bartMarkers.push(bartMarker);
