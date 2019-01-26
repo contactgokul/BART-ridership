@@ -51,3 +51,8 @@ Fail to complete some of the requirements.
 
 ### I:
 Fail to submit the project or fail to deliver the presentation.
+
+## Project description
+This project plots 2018 [BART monthly ridership data](https://www.bart.gov/about/reports/ridership) on a map featuring San Francisco, Alameda, and Contra Costa counties. Each BART station is represented by a marker on the station's coordinates. These coordinates are obtained from the [BART stations API](https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y). Additional information about each station is contained in its tooltip. The map can then be used to glean insights about how commuters use BART.
+
+The [project wiki](https://github.com/ryanloney/BART-ridership/wiki) provides a detailed description of how the project has been built.
