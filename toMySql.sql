@@ -1,5 +1,5 @@
 -- Create and use bart_db
--- DROP DATABASE IF EXISTS bart_db;
+DROP DATABASE IF EXISTS bart_db;
 CREATE DATABASE bart_db;
 USE bart_db;
 
