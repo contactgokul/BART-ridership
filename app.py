@@ -17,6 +17,8 @@ def index():
 @app.route('/data')
 def data():
     cursor = db.cursor()
+
+    # query includes station coordinates for the Exit Stations
     sql = "SELECT r.Year, r.Month, r.Entry_Station, r.Exit_Station, r.Avg_Weekday_Trips, m.gtfs_latitude, m.gtfs_longitude FROM ridership as r INNER JOIN metadata as m ON m.abbr2 = r.Exit_Station"
     cursor.execute(sql)
 
@@ -46,7 +48,10 @@ def metadata():
     return jsonify (results)
     session.close
 
-
+@app.route('/trips/<entry_station>')
+def trips(Entry_Station):
+    cursor = db.cursor()
+    sql = "SELECT r.Year, r.Month, r.Entry_Station, r.Exit_Station, r.Avg_Weekday_Trips FROM ridership AS r"
 
 
 if __name__ == "__main__":
