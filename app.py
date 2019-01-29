@@ -9,14 +9,26 @@ db = pymysql.connect("localhost", "root", f"{password}", "bart_db")
 # Create an instance of Flask
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    message =  "Bart Ridership in 2018"
+    return render_template("index.html", message = message)
+
 @app.route('/data')
 def data():
     cursor = db.cursor()
-    sql = "SELECT * FROM merged"
+    sql = "SELECT * FROM ridership"
     cursor.execute(sql)
-    columns = [col[0] for col in cursor.description] # gets the column headers in the merged table
-    results = [dict(zip(columns, row)) for row in cursor.fetchall()] # output is a list of dictionaries
-    return render_template("data.html", results = results)
+
+    # gets the column headers in the merged table
+    columns = [col[0] for col in cursor.description] 
+
+    # output is a list of dictionaries (key: column header, value: data)
+    results = [dict(zip(columns, row)) for row in cursor.fetchall()] 
+
+    # json format for list of dictionaries
+    return jsonify (results)
+    session.close
 
 
 
