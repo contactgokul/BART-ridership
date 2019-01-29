@@ -35,6 +35,7 @@ function createMarkers(response) {
 
   // Pull the "stations" property off of response.data
   var stations = response.root.stations.station;
+  console.log(stations);
 
   // Initialize an array to hold bike markers
   var bartMarkers = [];
