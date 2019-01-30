@@ -32,8 +32,8 @@ def data():
     return jsonify (results)
     session.close
 
-@app.route('/data/station/<entry_station>')
-def stations_data(entry_station):
+@app.route('/trips/<trip_month>/<entry_station>')
+def stations_data(trip_month, entry_station):
     cursor = db.cursor()
 
     # query includes station coordinates for the Exit Stations
@@ -45,7 +45,7 @@ def stations_data(entry_station):
         r.Avg_Weekday_Trips, \
         m.gtfs_latitude, \
         m.gtfs_longitude \
-    FROM ridership as r INNER JOIN metadata as m ON m.abbr2 = r.Exit_Station WHERE r.Entry_Station = '{entry_station}'"
+    FROM ridership as r INNER JOIN metadata as m ON m.abbr2 = r.Exit_Station WHERE r.Month = '{trip_month}' AND r.Entry_Station = '{entry_station}'"
     cursor.execute(sql)
 
     # gets the column headers in the merged table
@@ -74,10 +74,10 @@ def metadata():
     return jsonify (results)
     session.close
 
-@app.route('/trips/<entry_station>')
-def trips(Entry_Station):
-    cursor = db.cursor()
-    sql = "SELECT r.Year, r.Month, r.Entry_Station, r.Exit_Station, r.Avg_Weekday_Trips FROM ridership AS r"
+# @app.route('/trips/<entry_station>')
+# def trips(Entry_Station):
+#     cursor = db.cursor()
+#     sql = "SELECT r.Year, r.Month, r.Entry_Station, r.Exit_Station, r.Avg_Weekday_Trips FROM ridership AS r"
 
 
 if __name__ == "__main__":
