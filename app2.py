@@ -51,13 +51,30 @@ def metadata():
     return jsonify (results)
     session.close
 
-
-@app.route('/trips/<entry_station>')
-def trips(entry_station):
+@app.route('/trips')
+def trips():
     cursor = db.cursor()
 
     # Query allows filtering based on entry station
-    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Entry_Station WHERE r.Entry_Station = '{entry_station}'"
+    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Entry_Station, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station"
+    cursor.execute(sql)
+
+     # gets the column headers in the merged table
+    columns = [col[0] for col in cursor.description] 
+
+    # output is a list of dictionaries (key: column header, value: data)
+    results = [dict(zip(columns, row)) for row in cursor.fetchall()] 
+
+    # json format for list of dictionaries
+    return jsonify (results)
+    session.close
+
+@app.route('/trips/<entry_station>')
+def trips2(entry_station):
+    cursor = db.cursor()
+
+    # Query allows filtering based on entry station
+    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Entry_Station, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station WHERE r.Entry_Station = '{entry_station}'"
     cursor.execute(sql)
 
      # gets the column headers in the merged table
