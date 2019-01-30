@@ -1,6 +1,19 @@
 var url = `/trips`;
 console.log(url);
 
+// Create a function that cuts an array into chunks within a new array (list of lists)
+function chunks(array, chunkSize) {
+    var index = 0;
+    var arrayLength = array.length;
+    var tempArray = [];
+
+    for (index = 0; index < arrayLength; index += chunkSize) {
+        chunk = array.slice(index, index+chunkSize);
+        tempArray.push(chunk);
+    }
+    return tempArray;
+};
+
 d3.json(url, function(data){
     console.log(data);
 
@@ -37,20 +50,43 @@ d3.json(url, function(data){
         var url1 = `/trips/${selection}`;
         console.log(url1);
 
-        // Use the new URL to create an object containing exit station counties
-        var counties = [];
+        // Use the new URL to create an object containing counties and their exit stations
+        var counties = {}; // empty object that will contain county names as keys
+        var arrayCounties = []; // empty array that will contain an array for each exit station in the county
+                                // will serve as the value for the object 'counties'
+
         d3.json(url1, function(data) {
             console.log(data);
 
-            data.forEach(function(obj) {
-                if (counties.indexOf(obj["county"]) == -1) {
-                    counties.push(obj["county"])
-                }
+            // Populate arrayCounties
+            data.forEach(function(item) {
+                if (arrayCounties.indexOf(item["county"]) == -1) {
+                    arrayCounties.push(item["county"]);
+                };
             });
+            console.log(arrayCounties);
+
+            // Populate the counties object
+            for (var i = 0; i < data.length; i ++) {
+                var datum = data[i];
+                if (!counties[datum.county]) {
+                    counties[datum.county] = [];
+                }
+                if (counties[datum.county].indexOf(datum.Exit_Station) == -1) {
+                    counties[datum.county].push(datum.Exit_Station);
+                };
+            };
+
+            // Convert the array of county exit stations into an array of exit station arrays
+            for (var i = 0; i < arrayCounties.length; i ++) {
+                counties[arrayCounties[i]] = chunks(counties[arrayCounties[i]],1)
+            };
             console.log(counties);
+
         });
 
 
     };
     entryID.on("change", handleChange);
 });
+
