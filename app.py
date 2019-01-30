@@ -26,7 +26,33 @@ def data():
     columns = [col[0] for col in cursor.description] 
 
     # output is a list of dictionaries (key: column header, value: data)
-    results = [dict(zip(columns, row)) for row in cursor.fetchall()] 
+    results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    # json format for list of dictionaries
+    return jsonify (results)
+    session.close
+
+@app.route('/data/station/<entry_station>')
+def stations_data(entry_station):
+    cursor = db.cursor()
+
+    # query includes station coordinates for the Exit Stations
+    sql = f"SELECT \
+        r.Year, \
+        r.Month, \
+        r.Entry_Station, \
+        r.Exit_Station, \
+        r.Avg_Weekday_Trips, \
+        m.gtfs_latitude, \
+        m.gtfs_longitude \
+    FROM ridership as r INNER JOIN metadata as m ON m.abbr2 = r.Exit_Station WHERE r.Entry_Station = '{entry_station}'"
+    cursor.execute(sql)
+
+    # gets the column headers in the merged table
+    columns = [col[0] for col in cursor.description] 
+
+    # output is a list of dictionaries (key: column header, value: data)
+    results = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
     # json format for list of dictionaries
     return jsonify (results)
