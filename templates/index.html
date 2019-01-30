@@ -14,6 +14,7 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 </head>
 <body>
+  <!-- Intro Section -->
   <section id = "hero" class = "hero">
     <h1>{{ title }}</h1>
     <p id = "1">{{ text1 }}</p>
@@ -23,8 +24,23 @@
   <!-- The div that holds the map -->
         <div id="map-id"></div>
 
-    
-    
+  <!-- Radial Timeline -->
+  <section id = "radial">
+    <div class = "container">
+      <div class = "row">
+        <div class = "col-md-4" id = "selection">
+          <h3>BART Entry Stations</h3>
+          <label>Pick an entry station and see how many trip are made from it.</label>
+          <select id = "entry_station"></select>
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "col-md-12">
+          <div id = "radial"></div>
+        </div>
+      </div>
+    </div>
+  </section>
   
   
 
@@ -38,6 +54,7 @@
   <script type="text/javascript" src="static/js/config.js"></script>
   <!-- Our JavaScript -->
   <script type="text/javascript" src="static/js/logic.js"></script>
+  <script type="text/javascript" src="static/js/radial.js"></script>
 </body>
 
 </html>
