@@ -130,6 +130,53 @@ d3.json(url, function(data){
             zoomOutButton.parent = chart.rightAxesContainer;
 
             // Scrollbar
+            chart.scrollBarX = new am4core.Scrollbar();
+            chart.scrollBarX.parent = chart.rightAxesContainer;
+            chart.scrollBarX.orientation = "vertical";
+            chart.scrollBarX.align = "center";
+            chart.scrollBarX.exportable = false;
+
+            // Vertical orientation for zoom out button and proper scrollbar positioning
+            chart.rightAxesContainer.layout = "vertical";
+            chart.rightAxesContainer.padding(120, 20, 120, 20);
+
+            // Category axis
+            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.dataFields.category = "Exit_Station";
+
+            var categoryAxisRenderer = categoryAxis.renderer;
+            var categoryAxisLabel = categoryAxisRenderer.labels.template;
+            categoryAxisLabel.location = 0.5;
+            categoryAxisLabel.radius = 28;
+            categoryAxisLabel.relativeRotation = 90;
+
+            categoryAxisRenderer.fontSize = 11;
+            categoryAxisRenderer.minGridDistance = 10;
+            categoryAxisRenderer.grid.template.radius = -25;
+            categoryAxisRenderer.grid.template.strokeOpacity = 0.05;
+            categoryAxisRenderer.grid.template.interactionsEnabled = false;
+
+            categoryAxisRenderer.ticks.template.disabled = true;
+            categoryAxisRenderer.axisFills.template.disabled = true;
+            categoryAxisRenderer.line.disabled = true;
+
+            categoryAxisRenderer.tooltipLocation = 0.5;
+            categoryAxis.tooltip.defaultState.properties.opacity = 0;
+
+            // Value axis
+            var valueAxis = chart.yAxes.push(new am4charts.valueAxis());
+            valueAxis.min = -3;
+            valueAxis.max = 6;
+            valueAxis.strictMinMax = true;
+            valueAxis.tooltip.defaultState.properties.opacity = 0;
+            valueAxis.tooltip.animationDuration = 0;
+            valueAxis.cursorTooltipEnabled = true;
+            valueAxis.zIndex = 10;
+
+            var valueAxisRenderer = valueAxis.renderer;
+            valueAxisRenderer.axisFills.template.disabled = true;
+
         });
     };
     entryID.on("change", handleChange);
