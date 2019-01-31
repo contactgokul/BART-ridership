@@ -1,38 +1,19 @@
-// Part I: Extracting Data from the APIs //
+// Define the
 var url = `/trips`;
-console.log(url);
-
 var url1;
 var stations = [];
-
-var stns = {"type":"chord"};
+var stns;
 
 // Use the new URL to create an object containing months and their trips
-function createObject(link, stations) {
+function createObject(link) {
     console.log(link);
-    console.log(stations);
-
-    // Create an array of trips per entrance
-    var entrances = stations.map(value => ({"text": value, "values":[]}));
-    // console.log(entrances);
 
     // Using the data for the month...
     d3.json(link, function(obj) {
-        console.log(obj);
+        // console.log(obj);
 
-        // Loop through each object and extract the average number of weekday trips 
-        for (var i = 0; i < obj.length; i ++) {
-            for (var j = 0; j < entrances.length; j ++) {
-                if (obj[i]["Entry_Station"] == entrances[j]["text"]) {
-                    entrances[j]["values"].push(obj[i]["Avg_Weekday_Trips"]);
-                };
-            };
-        };
-        console.log(entrances);
-
-        // Include entrances array in the stns object
-        stns["series"] = entrances;
-        // console.log(stns);
+        // Define stns as the object in the json for the chosen month
+        stns = obj;
         createGraph(stns);
 
     });
@@ -50,7 +31,7 @@ function createGraph(stns) {
     });
 }
 
-// Use D3 to extract data and another library to create the graph
+// Use D3 to extract data ZingCharts library to create the graph
 d3.json(url, function(data){
     console.log(data[0]);
 
@@ -60,7 +41,7 @@ d3.json(url, function(data){
             stations.push(item["Entry_Station"]);
         };
     });
-    // console.log(stations);
+    console.log(stations);
 
     // Define a variable for month selected
     var entryID = d3.select("#month_sel");
@@ -93,26 +74,7 @@ d3.json(url, function(data){
         
             // Change the URL to show the selection
             url1 = `/trips/${selection}`;
-            // console.log(url1);
-            createObject(url1, stations);
+            createObject(url1);
         };
         entryID.on("change", handleChange);
 });
-
-// var chartData = {
-//     type: 'bar',  // Specify your chart type here.
-//     title: {
-//       text: 'My First Chart' // Adds a title to your chart
-//     },
-//     legend: {}, // Creates an interactive legend
-//     series: [  // Insert your series data here.
-//         { values: [35, 42, 67, 89]},
-//         { values: [28, 40, 39, 36]}
-//     ]
-//   };
-//   zingchart.render({ // Render Method[3]
-//     id: 'chartDiv',
-//     data: chartData,
-//     height: 400,
-//     width: 600
-//   });
