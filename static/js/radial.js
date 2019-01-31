@@ -20,7 +20,7 @@ function chunks(array, chunkSize) {
     return tempArray;
 };
 
-// 
+// Use D3 to extract data and am4charts to create the radial timeline
 d3.json(url, function(data){
     console.log(data);
 
@@ -95,12 +95,13 @@ d3.json(url, function(data){
                     
                 });
             });
+            delete counties.null;
             console.log(counties);
 
             // Part II: Create Graphs //
-            var startMonth = "Jan";
-            var endMonth = "Dec";
-            var currentMonth = "Jun";
+            var startMonth = 1;
+            var endMonth = 12;
+            var currentMonth = 6;
             var colorSet = new am4core.ColorSet();
 
             var chart = am4core.create("radial", am4charts.RadarChart);
@@ -110,8 +111,7 @@ d3.json(url, function(data){
             chart.startAngle = 270 - 180;
             chart.endAngle = 270 + 180;
 
-            chart.padding(5, 15, 5, 10)
-            chart.radius = am4core.percent(65);
+            chart.radius = am4core.percent(60);
             chart.innerRadius = am4core.percent(40);
 
             // Month label goes in the middle
@@ -119,28 +119,27 @@ d3.json(url, function(data){
             monthLabel.horizontalCenter = "middle";
             monthLabel.verticalCenter = "middle";
             monthLabel.fill = am4core.color("#673AB7");
-            monthLabel.fontsize = 30;
+            monthLabel.fontSize = 30;
             monthLabel.text = String(currentMonth);
 
-            // Zoom out button
+            // zoomout button
             var zoomOutButton = chart.zoomOutButton;
             zoomOutButton.dx = 0;
             zoomOutButton.dy = 0;
             zoomOutButton.marginBottom = 15;
             zoomOutButton.parent = chart.rightAxesContainer;
 
-            // Scrollbar
-            chart.scrollBarX = new am4core.Scrollbar();
-            chart.scrollBarX.parent = chart.rightAxesContainer;
-            chart.scrollBarX.orientation = "vertical";
-            chart.scrollBarX.align = "center";
-            chart.scrollBarX.exportable = false;
+            // scrollbar
+            chart.scrollbarX = new am4core.Scrollbar();
+            chart.scrollbarX.parent = chart.rightAxesContainer;
+            chart.scrollbarX.orientation = "vertical";
+            chart.scrollbarX.align = "center";
 
-            // Vertical orientation for zoom out button and proper scrollbar positioning
+            // vertical orientation for zoom out button and scrollbar to be positioned properly
             chart.rightAxesContainer.layout = "vertical";
             chart.rightAxesContainer.padding(120, 20, 120, 20);
 
-            // Category axis
+            // category axis
             var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
             categoryAxis.renderer.grid.template.location = 0;
             categoryAxis.dataFields.category = "Exit_Station";
@@ -151,8 +150,7 @@ d3.json(url, function(data){
             categoryAxisLabel.radius = 28;
             categoryAxisLabel.relativeRotation = 90;
 
-            categoryAxisRenderer.fontSize = 11;
-            categoryAxisRenderer.minGridDistance = 10;
+            categoryAxisRenderer.minGridDistance = 13;
             categoryAxisRenderer.grid.template.radius = -25;
             categoryAxisRenderer.grid.template.strokeOpacity = 0.05;
             categoryAxisRenderer.grid.template.interactionsEnabled = false;
@@ -164,10 +162,10 @@ d3.json(url, function(data){
             categoryAxisRenderer.tooltipLocation = 0.5;
             categoryAxis.tooltip.defaultState.properties.opacity = 0;
 
-            // Value axis
-            var valueAxis = chart.yAxes.push(new am4charts.valueAxis());
-            valueAxis.min = -3;
-            valueAxis.max = 6;
+            // value axis
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.min = 0;
+            valueAxis.max = 100;
             valueAxis.strictMinMax = true;
             valueAxis.tooltip.defaultState.properties.opacity = 0;
             valueAxis.tooltip.animationDuration = 0;
@@ -176,6 +174,146 @@ d3.json(url, function(data){
 
             var valueAxisRenderer = valueAxis.renderer;
             valueAxisRenderer.axisFills.template.disabled = true;
+            valueAxisRenderer.ticks.template.disabled = true;
+            valueAxisRenderer.minGridDistance = 30;
+            valueAxisRenderer.grid.template.strokeOpacity = 0.05;
+
+
+            // series
+            var series = chart.series.push(new am4charts.RadarColumnSeries());
+            series.columns.template.width = am4core.percent(90);
+            series.columns.template.strokeOpacity = 0;
+            series.dataFields.valueY = currentMonth;
+            series.dataFields.categoryX = "Exit_Station";
+            series.tooltipText = "{categoryX}:{valueY.Avg_Weekday_Trips}";
+
+            // this makes columns to be of a different color, depending on value
+            series.heatRules.push({ target: series.columns.template, property: "fill", minValue: -3, maxValue: 6, min: am4core.color("#673AB7"), max: am4core.color("#F44336"), dataField: "valueY" });
+
+            // cursor
+            var cursor = new am4charts.RadarCursor();
+            chart.cursor = cursor;
+            cursor.behavior = "zoomX";
+
+            cursor.xAxis = categoryAxis;
+            cursor.innerRadius = am4core.percent(40);
+            cursor.lineY.disabled = true;
+
+            cursor.lineX.fillOpacity = 0.2;
+            cursor.lineX.fill = am4core.color("#000000");
+            cursor.lineX.strokeOpacity = 0;
+            cursor.fullWidthLineX = true;
+
+            // month slider
+            var monthSliderContainer = chart.createChild(am4core.Container);
+            monthSliderContainer.layout = "vertical";
+            monthSliderContainer.padding(0, 38, 0, 38);
+            monthSliderContainer.width = am4core.percent(100);
+
+            var monthSlider = monthSliderContainer.createChild(am4core.Slider);
+            monthSlider.events.on("rangechanged", function () {
+                updateRadarData(startMonth + Math.round(monthSlider.start * (endMonth - startMonth)));
+            })
+            monthSlider.orientation = "horizontal";
+            monthSlider.start = 0.5;
+
+            chart.data = generateRadarData();
+
+            function generateRadarData() {
+                var data = [];
+                var i = 0;
+                for (var county in counties) {
+                    var countyData = counties[county];
+                    // console.log(countyData);
+
+                    countyData.forEach(function (exit) {
+                        var rawDataItem = { "Exit Station": exit[0] }
+
+                        for (var y = 2; y < exit.length; y++) {
+                            rawDataItem[(startMonth + y - 2)] = exit[y];
+                        }
+
+                        data.push(rawDataItem);
+                    });
+
+                    createRange(county, countyData, i);
+                    i++;
+
+                }
+                console.log(data);
+                return data;
+            }
+
+
+            function updateRadarData(month) {
+                if (currentMonth != month) {
+                    currentMonth = month;
+                    monthLabel.text = String(currentMonth);
+                    series.dataFields.valueY = currentMonth;
+                    chart.invalidateRawData();
+                }
+            }
+
+            function createRange(name, countyData, index) {
+
+                var axisRange = categoryAxis.axisRanges.create();
+                axisRange.axisFill.interactionsEnabled = true;
+                axisRange.text = name;
+                // first exit
+                axisRange.category = countyData[0][0];
+                // last exit
+                axisRange.endCategory = countyData[countyData.length - 1][0];
+
+                // every 3rd color for a bigger contrast
+                axisRange.axisFill.fill = colorSet.getIndex(index * 3);
+                axisRange.grid.disabled = true;
+                axisRange.label.interactionsEnabled = false;
+
+                var axisFill = axisRange.axisFill;
+                axisFill.innerRadius = -0.001; // almost the same as 100%, we set it in pixels as later we animate this property to some pixel value
+                axisFill.radius = -20; // negative radius means it is calculated from max radius
+                axisFill.disabled = false; // as regular fills are disabled, we need to enable this one
+                axisFill.fillOpacity = 1;
+                axisFill.togglable = true;
+
+                axisFill.showSystemTooltip = true;
+                axisFill.readerTitle = "click to zoom";
+                axisFill.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+
+                axisFill.events.on("hit", function (event) {
+                    var dataItem = event.target.dataItem;
+                    if (!event.target.isActive) {
+                        categoryAxis.zoom({ start: 0, end: 1 });
+                    }
+                    else {
+                        categoryAxis.zoomToCategories(dataItem.category, dataItem.endCategory);
+                    }
+                })
+
+                // hover state
+                var hoverState = axisFill.states.create("hover");
+                hoverState.properties.innerRadius = -10;
+                hoverState.properties.radius = -25;
+
+                var axisLabel = axisRange.label;
+                axisLabel.location = 0.5;
+                axisLabel.fill = am4core.color("#ffffff");
+                axisLabel.radius = 0;
+                axisLabel.relativeRotation = 0;
+            }
+
+            var slider = monthSliderContainer.createChild(am4core.Slider);
+            slider.start = 1;
+            slider.events.on("rangechanged", function () {
+                var start = slider.start;
+
+                chart.startAngle = 270 - start * 179 - 1;
+                chart.endAngle = 270 + start * 179 + 1;
+
+                valueAxis.renderer.axisAngle = chart.startAngle;
+            })
+
+
 
         });
     };
