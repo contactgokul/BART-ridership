@@ -90,8 +90,27 @@ def trips2(month):
     # output is a list of dictionaries (key: column header, value: data)
     results = [dict(zip(columns, row)) for row in cursor.fetchall()] 
 
+    # list of stations
+    stations = list(set([result["Entry_Station"] for result in results]))
+    entrances = []
+
+    # for each station, add a dictionary containing text as station names and value as an empty list
+    for stn in stations:
+        x = {"text": stn, "values":[]}
+        entrances.append(x)
+    
+    # Populate the values list per stn
+    for i in range(0,len(results)):
+        for j in range(0,len(entrances)):
+            if entrances[j]["text"] == results[i]["Entry_Station"]:
+                entrances[j]["values"].append(results[i]["Avg_Weekday_Trips"])
+
+    # include only the information needed in the html page
+    stns = {"type":"chord"}
+    stns["series"] = entrances
+
     # json format for list of dictionaries
-    return jsonify (results)
+    return jsonify (stns)
     session.close
 
 
