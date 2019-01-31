@@ -68,6 +68,9 @@ d3.json(url, function(data){
         })
         .attr("id", "option")
 
+        // Default is January chord chart
+        createObject("/trips/Jan");
+
         // What happens when a month is chosen
         function handleChange() {
             var selection = entryID.property("value");

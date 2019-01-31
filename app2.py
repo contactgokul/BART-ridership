@@ -105,6 +105,11 @@ def trips2(month):
             if entrances[j]["text"] == results[i]["Entry_Station"]:
                 entrances[j]["values"].append(results[i]["Avg_Weekday_Trips"])
 
+                # replace None with 0
+                entrances[j]["values"] = [0 if x is None else x for x in entrances[j]["values"]]
+                # sort number of weekly trips in descending order and get top 20
+                entrances[j]["values"].sort(reverse = True)
+
     # include only the information needed in the html page
     stns = {"type":"chord"}
     stns["series"] = entrances
