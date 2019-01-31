@@ -1,5 +1,11 @@
+// Part I: Extracting Data from the APIs //
 var url = `/trips`;
 console.log(url);
+
+var counties = {}; // empty object that will contain county names as keys
+var arrayCounties = []; // empty array that will contain an array for each exit station in the county
+                        // will serve as the value for the object 'counties'
+
 
 // Create a function that cuts an array into chunks within a new array (list of lists)
 function chunks(array, chunkSize) {
@@ -14,6 +20,7 @@ function chunks(array, chunkSize) {
     return tempArray;
 };
 
+// 
 d3.json(url, function(data){
     console.log(data);
 
@@ -48,13 +55,8 @@ d3.json(url, function(data){
         
         // Change the URL to show the selection
         var url1 = `/trips/${selection}`;
-        console.log(url1);
 
         // Use the new URL to create an object containing counties and their exit stations
-        var counties = {}; // empty object that will contain county names as keys
-        var arrayCounties = []; // empty array that will contain an array for each exit station in the county
-                                // will serve as the value for the object 'counties'
-
         d3.json(url1, function(data) {
             console.log(data);
 
@@ -83,8 +85,6 @@ d3.json(url, function(data){
             };
 
             // Append avg weekday trips to the arrays
-            console.log(counties["Alameda"][0][0]);
-
             data.forEach(function(obj) {
                 arrayCounties.forEach(function(county) {
                     counties[county].forEach(function(stn) {
@@ -96,10 +96,43 @@ d3.json(url, function(data){
                 });
             });
             console.log(counties);
+
+            // Part II: Create Graphs //
+            var startMonth = "Jan";
+            var endMonth = "Dec";
+            var currentMonth = "Jun";
+            var colorSet = new am4core.ColorSet();
+
+            var chart = am4core.create("radial", am4charts.RadarChart);
+            chart.numberFormatter.numberFormat = "#.00";
+            chart.hiddenState.properties.opacity = 0;
+
+            chart.startAngle = 270 - 180;
+            chart.endAngle = 270 + 180;
+
+            chart.padding(5, 15, 5, 10)
+            chart.radius = am4core.percent(65);
+            chart.innerRadius = am4core.percent(40);
+
+            // Month label goes in the middle
+            var monthLabel = chart.radarContainer.createChild(am4core.Label);
+            monthLabel.horizontalCenter = "middle";
+            monthLabel.verticalCenter = "middle";
+            monthLabel.fill = am4core.color("#673AB7");
+            monthLabel.fontsize = 30;
+            monthLabel.text = String(currentMonth);
+
+            // Zoom out button
+            var zoomOutButton = chart.zoomOutButton;
+            zoomOutButton.dx = 0;
+            zoomOutButton.dy = 0;
+            zoomOutButton.marginBottom = 15;
+            zoomOutButton.parent = chart.rightAxesContainer;
+
+            // Scrollbar
         });
-
-
     };
     entryID.on("change", handleChange);
 });
+
 
