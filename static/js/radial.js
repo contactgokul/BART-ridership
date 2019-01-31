@@ -79,10 +79,23 @@ d3.json(url, function(data){
 
             // Convert the array of county exit stations into an array of exit station arrays
             for (var i = 0; i < arrayCounties.length; i ++) {
-                counties[arrayCounties[i]] = chunks(counties[arrayCounties[i]],1)
+                counties[arrayCounties[i]] = chunks(counties[arrayCounties[i]],1);
             };
-            console.log(counties);
 
+            // Append avg weekday trips to the arrays
+            console.log(counties["Alameda"][0][0]);
+
+            data.forEach(function(obj) {
+                arrayCounties.forEach(function(county) {
+                    counties[county].forEach(function(stn) {
+                        if (obj["Exit_Station"] == stn[0]) {
+                            stn.push(obj["Avg_Weekday_Trips"]);
+                        };
+                    });
+                    
+                });
+            });
+            console.log(counties);
         });
 
 
