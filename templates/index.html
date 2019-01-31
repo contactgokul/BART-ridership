@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css">
 
   <!-- amCharts script -->
-  <script src="https://www.amcharts.com/lib/4/core.js"></script>
-  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+  <script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+	<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+		ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];</script>
 
   <!-- Bootstrap script -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -34,26 +34,18 @@
     <div class = "container">
       <div class = "row">
         <div class = "col-md-4" id = "selection">
-          <h3>BART Entry Stations</h3>
-          <label>Pick an entry station and see how many trip are made from it.</label>
-          <select id = "entry_station"></select>
+          <h3>{{ subhead }}</h3>
+          <label>{{ label }}</label>
+          <select id = "month_sel"></select>
         </div>
       </div>
     </div>
   </section>
   
   <hr>
-  
-  <section id = "timeline">
-    <div class = "container">
-      <div class = "row">
-        <div class = "col-md-12">
-          <div id = "radial"></div>
-        </div>
-        </div>
-    </div>
-  </section>
-  
+  <div id = "chartdiv"></div>
+  <hr>
+
 
   <!-- D3 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script>
@@ -66,7 +58,7 @@
 
   <!-- Custom JavaScript -->
   <script type="text/javascript" src="static/js/logic.js"></script>
-  <script type="text/javascript" src="static/js/radial.js"></script>
+  <script type="text/javascript" src="static/js/chord.js"></script>
 </body>
 
 </html>

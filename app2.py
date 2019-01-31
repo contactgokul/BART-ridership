@@ -12,9 +12,16 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     title =  "Bart Ridership in 2018"
+    
     text1 = "The Bay Area Rapid Transit (BART) is the rail system that connects three counties (San Francisco, Alameda, and Contra Costa)1. There are 48 stations whose fare gates record various information including time, date, and station2. The information is compiled by BART into ridership reports which are publicly available."
+    
     text2 = "Interesting stories may be gleaned from the data provided by BART. For instance, it is possible to find out where passengers mostly go to from a particular entry station. Do passengers take BART from the suburbs to go mainly to San Francisco or to other suburbs? Which line sees the heaviest usage? How do line extensions impact ridership?"
-    return render_template("index.html", title = title, text1 = text1, text2 = text2)
+
+    label = "Pick a month in 2018 and see how many trips occurred."
+
+    subhead = "BART Ridership in 2018, by Month"
+
+    return render_template("index.html", title = title, text1 = text1, text2 = text2, label = label, subhead = subhead)
 
 @app.route('/data')
 def data():
@@ -69,12 +76,12 @@ def trips():
     return jsonify (results)
     session.close
 
-@app.route('/trips/<entry_station>')
-def trips2(entry_station):
+@app.route('/trips/<month>')
+def trips2(month):
     cursor = db.cursor()
 
     # Query allows filtering based on entry station
-    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Entry_Station, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station WHERE r.Entry_Station = '{entry_station}'"
+    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Entry_Station, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station WHERE r.Month = '{month}'"
     cursor.execute(sql)
 
      # gets the column headers in the merged table
