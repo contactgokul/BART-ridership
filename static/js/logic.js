@@ -8,9 +8,17 @@ function createMap(bartStations) {
     accessToken: API_KEY
   });
 
+  var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://mapbox.com\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox.dark",
+    accessToken: API_KEY
+  });
+
   // Create a baseMaps object to hold the lightmap layer
   var baseMaps = {
-    "Light Map": lightmap
+    "Light Map": lightmap,
+    "Dark Map": darkmap
   };
 
   // Create an overlayMaps object to hold the bartStations layer
@@ -22,7 +30,7 @@ function createMap(bartStations) {
   var map = L.map("map-id", {
     center: [37.8037, -122.2714],
     zoom: 10.5,
-    layers: [lightmap, bartStations]
+    layers: [lightmap, darkmap, bartStations]
   });
 
   // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
@@ -46,10 +54,10 @@ function createMarkers(response) {
 
     // For each station, create a marker and bind a popup with the station's name
     var bartMarker = L.circle([station.gtfs_latitude, station.gtfs_longitude], {
-      color: "green",
+      color: "transparent",
       fillColor: "green",
-      fillOpacity: 0.50,
-      radius: station.Avg_Weekday_Trips * 3,
+      fillOpacity: 0.45,
+      radius: station.Avg_Weekday_Trips * 2,
       strokeOpacity: 0.75,
       strokeWidth: 1
     }).bindPopup("<h3>Station: " + station.Exit_Station + "<h3><h3>Avg. Trips: " + station.Avg_Weekday_Trips + "<h3>");
@@ -65,4 +73,4 @@ function createMarkers(response) {
 
 // Perform an API call to the BART API to get station information. Call createMarkers when complete
 // d3.json("https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y", createMarkers);
-d3.json("/trips/Jan/12", createMarkers);
+d3.json("/trips/Jan/EM", createMarkers);
