@@ -26,9 +26,10 @@
     <p id = "2">{{ text2 }}</p>
   </section>
 
-  <!-- The div that holds the map -->
-        <div id="map-id"></div>
-
+  <!-- Visualization #1
+    The div that holds the original Leaflet map -->
+  <!-- <div id="map2-id"></div> -->
+  
   <!-- Chord chart -->
   <section class = "choices">
     <div class = "container">
@@ -46,7 +47,27 @@
   <div id = "chartdiv"></div>
   <hr>
 
-  
+  <!-- Visualization #2
+    The div that holds the interactive Leaflet map -->
+    <div class="container">
+      <div class="row" id="map-location">
+        <div class="col-md-2">
+          <div class="well">
+            <h5>SELECT Entry Station:</h5>
+            <select id="selDataset1" onchange="optionChanged(this.value)"></select>
+            <select id="selDataset2" onchange="optionChanged(this.value)"></select>
+          </div>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Entry Station</h3>
+            </div>
+            <div id="sample-metadata" class="panel-body"></div>
+          </div>
+        </div>
+        <div id="map-id"></div>
+        <!-- <div id="map1-id"></div> -->
+      </div>
+    </div>
 
 
   <!-- D3 -->
@@ -59,7 +80,9 @@
   <script type="text/javascript" src="static/js/config.js"></script>
 
   <!-- Custom JavaScript -->
-  <script type="text/javascript" src="static/js/logic.js"></script>
+  <!-- <script type="text/javascript" src="static/js/logic.js"></script> -->
+  <script type="text/javascript" src="static/js/scatter.js"></script>
+  <script type="text/javascript" src="static/js/functions.js"></script>
   <script type="text/javascript" src="static/js/chord.js"></script>
 </body>
 
