@@ -22,10 +22,11 @@ def index():
 
     label1 = "Pick a month in 2018 and see how many trips occurred from one county to another."
     label2 = "Calculations are based on the weekday trip numbers provided by BART."
-    subhead1 = "BART Ridership in 2018, by Month"
+    subhead1 = "Where Do Passengers Go?"
     subhead2 = "Total Number of Weekday BART Trips in 2018, by Month"
+    subhead3 = "Map of 2018 BART Trips"
 
-    return render_template("index.html", title = title, text1 = text1, text2 = text2, label1 = label1, subhead1 = subhead1, label2 = label2, subhead2 = subhead2)
+    return render_template("index.html", title = title, text1 = text1, text2 = text2, label1 = label1, subhead1 = subhead1, label2 = label2, subhead2 = subhead2, subhead3 = subhead3)
 
 @app.route('/data')
 def data():
