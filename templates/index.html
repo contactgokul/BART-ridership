@@ -26,10 +26,6 @@
     <p id = "2">{{ text2 }}</p>
   </section>
 
-  <!-- Visualization #1
-    The div that holds the original Leaflet map -->
-  <!-- <div id="map2-id"></div> -->
-  
   <!-- Chord chart -->
   <section class = "choices">
     <div class = "container">
@@ -47,25 +43,19 @@
   <div id = "chartdiv"></div>
   <hr>
 
-  <!-- Visualization #2
-    The div that holds the interactive Leaflet map -->
+  <!-- Visualization #3 Interactive Leaflet map -->
     <div class="container">
       <div class="row" id="map-location">
-        <div class="col-md-2">
+        <div class="col-md-4">
           <div class="well">
-            <h5>SELECT Entry Station:</h5>
-            <select id="selDataset1" onchange="optionChanged(this.value)"></select>
-            <select id="selDataset2" onchange="optionChanged(this.value)"></select>
-          </div>
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title">Entry Station</h3>
-            </div>
-            <div id="sample-metadata" class="panel-body"></div>
+            <h5><strong>Select Entry Station and Month to see exit traffic for that station:</strong></h5>
+              <select id="selDataset1" onchange="optionChanged(this.value)"></select>
+              <select id="selDataset2" onchange="optionChanged(this.value)"></select>
           </div>
         </div>
-        <div id="map-id"></div>
-        <!-- <div id="map1-id"></div> -->
+        <div class="col-md-8">
+          <div id="map-id"></div>
+        </div>
       </div>
     </div>
 
