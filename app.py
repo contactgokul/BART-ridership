@@ -22,11 +22,15 @@ def index():
 
     label1 = "Pick a month in 2018 and see how many trips occurred from one county to another."
     label2 = "Calculations are based on the weekday trip numbers provided by BART."
+
     subhead1 = "Where Do Passengers Go?"
     subhead2 = "Total Number of Weekday BART Trips in 2018, by Month"
     subhead3 = "Map of 2018 BART Trips"
 
-    return render_template("index.html", title = title, text1 = text1, text2 = text2, label1 = label1, subhead1 = subhead1, label2 = label2, subhead2 = subhead2, subhead3 = subhead3)
+    stn_names = "RM, Richmond; EN, El Cerrito Del Norte; EP, El Cerrito Plaza; NB, North Berkeley; BK, Berkeley; AS, Ashby; MA, MacArthur; 19, 19th Street Oakland, 12, 12th Street / Oakland City Center; LM, Lake Merritt; FV, Fruitvale; CL, Coliseum; SL, San Leandro; BF, Bayfair; HY, Hayward; SH, South Hayward; UC, Union City; FM, Fremont; CN, Concord; PH, Pleasant Hill; WC, Walnut Creek; LF, Lafayette; OR, Orinda; RR, Rockridge; OW, West Oakland; EM, Embarcadero; MT, Montgomery Street; PL, Powell Street; CC, Civic Center; 16, 16th Street Mission; 24, 24th Street Mission; GP, Glen Park; BP, Balboa Park; DC, Daly City; CM, Colma; CV, Castro Valley; ED, Dublin/Pleasanton; NC, North Concord; WP, Pittsburg/Bay Point; SS, South San Francisco; SB, San Bruno; SO, San Francisco International Airport; MB, Millbrae; WD, West Dublin/Pleasanton; OA, Oakland International Airport; WS, Warm Springs; PC, Pittsburg Centre; AN, Antioch"
+
+
+    return render_template("index.html", title = title, text1 = text1, text2 = text2, label1 = label1, subhead1 = subhead1, label2 = label2, subhead2 = subhead2, subhead3 = subhead3, stn_names = stn_names)
 
 @app.route('/data')
 def data():
