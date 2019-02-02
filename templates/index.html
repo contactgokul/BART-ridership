@@ -15,25 +15,44 @@
   <!-- Bootstrap script -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <!-- Our CSS -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+
+<!-- am4chart scripts -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
 </head>
 <body>
   <!-- Intro Section -->
   <section id = "hero" class = "hero">
-    <h1>{{ title }}</h1>
-    <p id = "1">{{ text1 }}</p>
-    <p id = "2">{{ text2 }}</p>
+    <div class = "container">
+      <div class = "row">
+        <div class = "col-md-12">
+            <h1>{{ title }}</h1>
+            <p id = "1">{{ text1 }}</p>
+            <p id = "2">{{ text2 }}</p>
+            <a href = "#months" class = "btn"><b>Trips by County</b></a>
+            <a href = "#stations" class = "btn"><b>Trips by Month</b></a>
+            <a href = "#leaflet" class = "btn"><b>Map View</b></a>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- Chord chart -->
+  <hr>
+
+  <!-- Visualisaton #1: Chord chart -->
   <section class = "choices">
     <div class = "container">
       <div class = "row">
-        <div class = "col-md-4" id = "selection">
-          <h3>{{ subhead }}</h3>
-          <label>{{ label }}</label>
-          <select id = "month_sel"></select>
+        <div class = "col-md-12" id = "months">
+          <h3>{{ subhead1 }}</h3>
+          <label>{{ label1 }}</label>   <select id = "month_sel"></select>
+          <br>
+          <a href = "#stations" class = "btn"><b>Trips by Month</b></a>
+            <a href = "#leaflet" class = "btn"><b>Map View</b></a>
         </div>
       </div>
     </div>
@@ -43,21 +62,52 @@
   <div id = "chartdiv"></div>
   <hr>
 
-  <!-- Visualization #3 Interactive Leaflet map -->
-    <div class="container">
-      <div class="row" id="map-location">
-        <div class="col-md-4">
-          <div class="well">
-            <h5><strong>Select Entry Station and Month to see exit traffic for that station:</strong></h5>
-              <select id="selDataset1" onchange="optionChanged(this.value)"></select>
-              <select id="selDataset2" onchange="optionChanged(this.value)"></select>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div id="map-id"></div>
+  <!-- Visualisation #2: Interactive bar graph -->
+  <section class = "choices">
+    <div class = "container">
+      <div class = "row">
+        <div class = "col-md-12" id = "stations">
+          <h3>{{ subhead2 }}</h3>
+          <label>{{ label2 }}</label>
+          <br>
+          <a href = "#months" class = "btn"><b>Trips by County</b></a>
+          <a href = "#leaflet" class = "btn"><b>Map View</b></a>
         </div>
       </div>
     </div>
+  </section>
+
+  <hr>
+  <div id = "bar"></div>
+  <hr>
+
+  <!-- Visualization #3 Interactive Leaflet map -->
+  <div class="container">
+    <div class="row" >
+        <h3>{{ subhead3 }}</h3>
+      <div class="col-md-4">
+        <div class="well" id = "leaflet">
+          <h5><strong>Select Entry Station and Month to see exit traffic for that station:</strong></h5>
+            <select id="selDataset1" onchange="optionChanged(this.value)"></select>
+            <select id="selDataset2" onchange="optionChanged(this.value)"></select>
+        </div>
+        <br>
+            <a href = "#months" class = "btn"><b>Trips by County</b></a>
+            <a href = "#stations" class = "btn"><b>Trips by Month</b></a>
+      </div>
+      <div class="col-md-8">
+        <h5><b>🚉 Two-Letter Station Code, Station Name </b></h5>
+        <p>{{ stn_names }}</p>
+          
+      </div>
+    </div>
+    <hr>
+    <div class = "row" id="map-location">
+      <div class = "col-md-12">
+          <div id="map-id"></div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- D3 -->
@@ -71,9 +121,10 @@
 
   <!-- Custom JavaScript -->
   <!-- <script type="text/javascript" src="static/js/logic.js"></script> -->
+  <script type="text/javascript" src="static/js/chord.js"></script>
   <script type="text/javascript" src="static/js/scatter.js"></script>
   <script type="text/javascript" src="static/js/functions.js"></script>
-  <script type="text/javascript" src="static/js/chord.js"></script>
+  <script type="text/javascript" src="static/js/radial.js"></script>
 </body>
 
 </html>

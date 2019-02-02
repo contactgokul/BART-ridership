@@ -16,15 +16,21 @@ app = Flask(__name__)
 def index():
     title =  "Bart Ridership in 2018"
     
-    text1 = "The Bay Area Rapid Transit (BART) is the rail system that connects three counties (San Francisco, Alameda, and Contra Costa)1. There are 48 stations whose fare gates record various information including time, date, and station2. The information is compiled by BART into ridership reports which are publicly available."
+    text1 = "The Bay Area Rapid Transit (BART) is the rail system that connects four counties (San Francisco, San Mateo, Alameda, and Contra Costa). There are 48 stations whose fare gates record various information including time, date, and station. The information is compiled by BART into ridership reports which are publicly available."
     
     text2 = "Interesting stories may be gleaned from the data provided by BART. For instance, it is possible to find out where passengers mostly go to from a particular entry station. Do passengers take BART from the suburbs to go mainly to San Francisco or to other suburbs? Which line sees the heaviest usage? How do line extensions impact ridership?"
 
-    label = "Pick a month in 2018 and see how many trips occurred."
+    label1 = "Pick a month in 2018 and see how many trips occurred from one county to another."
+    label2 = "Calculations are based on the weekday trip numbers provided by BART."
 
-    subhead = "BART Ridership in 2018, by Month"
+    subhead1 = "Where Do Passengers Go?"
+    subhead2 = "Total Number of Weekday BART Trips in 2018, by Month"
+    subhead3 = "Map of 2018 BART Trips"
 
-    return render_template("index.html", title = title, text1 = text1, text2 = text2, label = label, subhead = subhead)
+    stn_names = "RM, Richmond; EN, El Cerrito Del Norte; EP, El Cerrito Plaza; NB, North Berkeley; BK, Berkeley; AS, Ashby; MA, MacArthur; 19, 19th Street Oakland, 12, 12th Street / Oakland City Center; LM, Lake Merritt; FV, Fruitvale; CL, Coliseum; SL, San Leandro; BF, Bayfair; HY, Hayward; SH, South Hayward; UC, Union City; FM, Fremont; CN, Concord; PH, Pleasant Hill; WC, Walnut Creek; LF, Lafayette; OR, Orinda; RR, Rockridge; OW, West Oakland; EM, Embarcadero; MT, Montgomery Street; PL, Powell Street; CC, Civic Center; 16, 16th Street Mission; 24, 24th Street Mission; GP, Glen Park; BP, Balboa Park; DC, Daly City; CM, Colma; CV, Castro Valley; ED, Dublin/Pleasanton; NC, North Concord; WP, Pittsburg/Bay Point; SS, South San Francisco; SB, San Bruno; SO, San Francisco International Airport; MB, Millbrae; WD, West Dublin/Pleasanton; OA, Oakland International Airport; WS, Warm Springs; PC, Pittsburg Centre; AN, Antioch"
+
+
+    return render_template("index.html", title = title, text1 = text1, text2 = text2, label1 = label1, subhead1 = subhead1, label2 = label2, subhead2 = subhead2, subhead3 = subhead3, stn_names = stn_names)
 
 @app.route('/data')
 def data():
@@ -96,7 +102,6 @@ def trips2(month):
 
     # output is a list of dictionaries (key: column header, value: data)
     results = [dict(zip(columns, row)) for row in cursor.fetchall()] 
-
     # list of stations
     stations = list(set([result["Entry_Station"] for result in results]))
     counties = list(set([result["county"] for result in results]))
@@ -180,6 +185,45 @@ def stations_data(trip_month, entry_station):
 
     # json format for list of dictionaries
     return jsonify (results)
+
+@app.route("/trips1")
+def trips3():
+    cursor = create_connection()
+
+    # Query allows filtering based on entry station
+    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Entry_Station, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station"
+    cursor.execute(sql)
+
+    # gets the column headers in the merged table
+    columns = [col[0] for col in cursor.description] 
+
+    # output is a list of dictionaries (key: column header, value: data)
+    results = [dict(zip(columns, row)) for row in cursor.fetchall()] 
+
+    # convert the None's to 0's for weekday trips
+    for result in results:
+        if result["Avg_Weekday_Trips"] == None:
+            result["Avg_Weekday_Trips"] = 0
+        else:
+            result["Avg_Weekday_Trips"] = result["Avg_Weekday_Trips"]
+
+    # Group list of dictionaries by month
+    results2 = []
+    results.sort(key = itemgetter("Month"))
+
+    for key, group in groupby(results, lambda item: item["Month"]):
+        results2.append({"Month": key, "Trips": sum([item["Avg_Weekday_Trips"] for item in group])})
+
+    # Reorder results2 by month
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    srt = {b:i for i, b in enumerate(months)} # numbers and months
+
+    results2 = sorted(results2, key = lambda x: srt[x["Month"]])
+
+    # json format for list of dictionaries
+    return jsonify (results2)
 
 if __name__ == "__main__":
     app.run(debug=True)
