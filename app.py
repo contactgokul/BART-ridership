@@ -63,7 +63,12 @@ def trips():
     cursor = create_connection()
 
     # Query allows filtering based on entry station
-    sql = f"SELECT r.Year, r.Month, r.Avg_Weekday_Trips, r.Entry_Station, r.Exit_Station, m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station"
+    sql = f"SELECT r.Year, \
+        r.Month, \
+        r.Avg_Weekday_Trips, \
+        r.Entry_Station, \
+        r.Exit_Station, \
+        m.county FROM metadata AS m INNER JOIN ridership as r ON m.abbr2 = r.Exit_Station"
     cursor.execute(sql)
 
      # gets the column headers in the merged table
@@ -117,7 +122,7 @@ def trips2(month):
     # json format for list of dictionaries
     return jsonify (stns)
 
-@app.route('/trips/<trip_month>/<entry_station>')
+@app.route('/data/<trip_month>/<entry_station>')
 def stations_data(trip_month, entry_station):
     cursor = create_connection()
 
@@ -130,7 +135,11 @@ def stations_data(trip_month, entry_station):
         r.Avg_Weekday_Trips, \
         m.gtfs_latitude, \
         m.gtfs_longitude \
-    FROM ridership as r INNER JOIN metadata as m ON m.abbr2 = r.Exit_Station WHERE r.Month = '{trip_month}' AND r.Entry_Station = '{entry_station}'"
+    FROM ridership as r \
+        INNER JOIN metadata as m \
+        ON m.abbr2 = r.Exit_Station \
+        WHERE r.Month = '{trip_month}' \
+        AND r.Entry_Station = '{entry_station}'"
     cursor.execute(sql)
 
     # gets the column headers in the merged table
