@@ -85,7 +85,7 @@ console.log(url);
   d3.json(url, function(data){
 
     // Define a variable for entry station selected.  Run map function to populate the variables with
-    // unique values from the trips URL.
+    // unique values from the data URL.
     var input_station = data.map(d => d.Entry_Station).unique()
     var input_month = data.map(d => d.Month).unique()
 
@@ -132,7 +132,7 @@ console.log(url);
         var selection2 = monthMenu.property("value");
         // Change the URL to show the selection.  Note the app.py has data/month/
         // so selection2 comes first.
-        console.log(`/trips/${selection2}/${lastChar}`);
+        console.log(`/data/${selection2}/${lastChar}`);
         console.log(selection2)
         // Use D3 to select the anchors in the HTML.  Create variable for what you will be selecting to.
         var map = d3.select("#map-id");
@@ -143,7 +143,7 @@ console.log(url);
         map.remove();
         d3.select("body").append("div").attr("id","map-id")
         // Call d3.json on the newly chosen URL and run the createMarkers function above for just that data.  
-        d3.json(`/trips/${selection2}/${selection1}`, createMarkers); 
+        d3.json(`/data/${selection2}/${selection1}`, createMarkers); 
     };
     // Run handle change function on the two variables corresponding to the HTML tags for drop down menus
     // which we created above.
@@ -152,30 +152,30 @@ console.log(url);
   
 });
 
-// Attempting to render the original markers; can comment this function and d3.json out.
-function createBartAPIMarkers(response2) {
+// // Attempting to render the original markers; can comment this function and d3.json out.
+// function createBartAPIMarkers(response2) {
 
-  // Pull the "stations" property off of response2.data
-  var stations = response2.root.stations.station;
+//   // Pull the "stations" property off of response2.data
+//   var stations = response2.root.stations.station;
 
-  // Initialize an array to hold bike markers
-  var bartMarkers = [];
+//   // Initialize an array to hold bike markers
+//   var bartMarkers = [];
 
-  // Loop through the stations array
-  for (var index = 0; index < stations.length; index++) {
-    var station = stations[index];
+//   // Loop through the stations array
+//   for (var index = 0; index < stations.length; index++) {
+//     var station = stations[index];
 
-    // For each station, create a marker and bind a popup with the station's name
-    var bartMarker = L.marker([station.gtfs_latitude, station.gtfs_longitude])
-      .bindPopup("<h3>" + station.name + "<h3><h3>Address: " + station.address + "<h3>");
+//     // For each station, create a marker and bind a popup with the station's name
+//     var bartMarker = L.marker([station.gtfs_latitude, station.gtfs_longitude])
+//       .bindPopup("<h3>" + station.name + "<h3><h3>Address: " + station.address + "<h3>");
 
-    // Add the marker to the bartMarkers array
-    bartMarkers.push(bartMarker);
-  }
+//     // Add the marker to the bartMarkers array
+//     bartMarkers.push(bartMarker);
+//   }
 
-  // Create a layer group made from the bike markers array, pass it into the createMap function
-  createMap(L.layerGroup(bartMarkers));
-}
+//   // Create a layer group made from the bike markers array, pass it into the createMap function
+//   createMap(L.layerGroup(bartMarkers));
+// }
 
 // Perform an API call to the BART API to get station information. Call createMarkers when complete
-d3.json("https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y", createBartAPIMarkers);
+// d3.json("https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y", createMap);
