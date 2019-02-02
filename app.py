@@ -2,6 +2,8 @@
 from flask import Flask, render_template, redirect, jsonify
 import pymysql
 from config import password
+from itertools import groupby
+from operator import itemgetter
 
 # Create a connection to the MySQL database
 def create_connection():
@@ -97,23 +99,51 @@ def trips2(month):
 
     # list of stations
     stations = list(set([result["Entry_Station"] for result in results]))
-    entrances = []
+    counties = list(set([result["county"] for result in results]))
 
+    # list of station and county pairs
+    stnCounty = [{"station":result["Exit_Station"], "county": result["county"]} for result in results]
+
+    # insert county of entry station in results
+    for i in range(0, len(results)):
+        for j in range(0, len(stnCounty)):
+            if results[i]["Entry_Station"] == stnCounty[j]["station"]:
+                results[i]["county_entry"] = stnCounty[j]["county"]
+            else:
+                continue
+
+    # Remove dictionaries with None values for county
+    results1 = []
+
+    for i in range(0, len(results)):
+        if results[i]["county_entry"] != None: 
+            if results[i]["county"] != None: 
+                if results[i]["Avg_Weekday_Trips"] != None:
+                    results1.append(results[i])
+    
+    # Sort by start and end keys
+    grouper = itemgetter("county_entry", "county")
+    results2 = []
+
+    for key, grp in groupby(sorted(results1, key = grouper), grouper):
+        temp_dict = dict(zip(["county_entry", "county"], key))
+        temp_dict["qty_trips"] = sum(item["Avg_Weekday_Trips"] for item in grp)
+        results2.append(temp_dict)
+
+    
+    entrances = []
     # for each station, add a dictionary containing text as station names and value as an empty list
-    for stn in stations:
-        x = {"text": stn, "values":[]}
+    for county in counties:
+        x = {"text": county, "values":[]}
         entrances.append(x)
     
-    # Populate the values list per stn
-    for i in range(0,len(results)):
-        for j in range(0,len(entrances)):
-            if entrances[j]["text"] == results[i]["Entry_Station"]:
-                entrances[j]["values"].append(results[i]["Avg_Weekday_Trips"])
-
-                # replace None with 0
-                entrances[j]["values"] = [0 if x is None else x for x in entrances[j]["values"]]
-                # sort number of weekly trips in descending order and get top 20
-                entrances[j]["values"].sort(reverse = True)
+    # if the item entrances["text"] matches the item in results2["county_entry"], add results2[item]["qty_trips"] to entrances["values"]
+    for x in range(0,len(results2)):
+        for y in range(0,len(entrances)):
+            if entrances[y]["text"] == results2[x]["county_entry"]:
+                entrances[y]["values"].append(results2[x]["qty_trips"])
+            else:
+                continue
 
     # include only the information needed in the html page
     stns = {"type":"chord"}
