@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    title =  "Bart Ridership in 2018"
+    title =  "BART Ridership in 2018"
     
     text1 = "The Bay Area Rapid Transit (BART) is the rail system that connects four counties (San Francisco, San Mateo, Alameda, and Contra Costa). There are 48 stations whose fare gates record various information including time, date, and station. The information is compiled by BART into ridership reports which are publicly available."
     

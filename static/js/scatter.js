@@ -119,7 +119,7 @@ console.log(url);
         .attr("id", "option")
 
     // Default is Richmond station
-    // createObject("/data/RM");
+    d3.json("/data/Jan/RM",createMarkers);
     
     // 3.2 Create Handle Change function which changes the data in the chart to
     // correspond to the Months and Entry_Stations selected in the drop down menus.
@@ -151,31 +151,3 @@ console.log(url);
     monthMenu.on("change", handleChange);
   
 });
-
-// // Attempting to render the original markers; can comment this function and d3.json out.
-// function createBartAPIMarkers(response2) {
-
-//   // Pull the "stations" property off of response2.data
-//   var stations = response2.root.stations.station;
-
-//   // Initialize an array to hold bike markers
-//   var bartMarkers = [];
-
-//   // Loop through the stations array
-//   for (var index = 0; index < stations.length; index++) {
-//     var station = stations[index];
-
-//     // For each station, create a marker and bind a popup with the station's name
-//     var bartMarker = L.marker([station.gtfs_latitude, station.gtfs_longitude])
-//       .bindPopup("<h3>" + station.name + "<h3><h3>Address: " + station.address + "<h3>");
-
-//     // Add the marker to the bartMarkers array
-//     bartMarkers.push(bartMarker);
-//   }
-
-//   // Create a layer group made from the bike markers array, pass it into the createMap function
-//   createMap(L.layerGroup(bartMarkers));
-// }
-
-// Perform an API call to the BART API to get station information. Call createMarkers when complete
-// d3.json("https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y", createMap);
