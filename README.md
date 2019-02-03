@@ -31,9 +31,11 @@ The second part is the chord diagram, visualises data by month. A dropdown butto
 
 The third part features a bar chart with a slider on top. The bars correspond to the number of trips for the months. The default view has 12 months but the slider can be used to reduce the number of months for viewing.
 
-![bar](https://github.com/ryanloney/BART-ridership/blob/efa29879bc5204071f55056015b7089f572df2e1/static/img/BART-bar.png)
+![bar](https://github.com/ryanloney/BART-ridership/blob/master/static/img/BART-bar.png)
 
 The last view is a map with circular markers representing the number of rides terminating in indicated stations for the selected entry station and month.
+
+![map](https://github.com/ryanloney/BART-ridership/blob/master/static/img/BART-map.png)
 
 # Analysis
 The results indicated that the number of trips was highest in September 2018 while the lowest was in December. On the other hand, the number of trips originating in San Francisco stations Montgomery and Embarcadero had very high number trip going to many East Bay stations, such as Concord. However, trips starting in Concord and ending in Montgomery or Embarcadero are much fewer. 
