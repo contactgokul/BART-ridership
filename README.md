@@ -1,58 +1,22 @@
-# Project 2
+## Executive Summary
+The [Bay Area Rapid Transit](https://www.bart.gov/) (BART) currently connects four California counties via rail: Alameda, Contra Costa, San Francisco, and San Mateo. In the future, BART will also connect to Santa Clara when the [Milpitas and Berryessa BART stations open](https://www.mercurynews.com/2018/06/11/bart-to-milpitas-berryessa-may-not-happen-until-late-2019/). BART fare gates obtain information about each paid trip like origin and destination stations, and date and time of travel. Ridership information is made available online to everyone interested in this type of information. The aim of this study is to use the publicly available data to find insights about how commuters used BART in 2018.
 
-## Requirements
+The product is a dashboard containing dynamic graphs that visualise the 2018 ridership data in the form of a bar chart of monthly ridership, a chord diagram tracing the trip routes at the county level, and a map on which the number of rides is represented by the size of the radius of the circle marking each BART station. 
 
-1. Your visualization must include a Python Flask powered RESTful API, HTML/CSS, JavaScript, and at least one database (MySQL, MongoDB, SQLite, etc.)
+## Method Summary
+For this project, the 2018 [BART monthly ridership data](https://www.bart.gov/about/reports/ridership) was downloaded as Excel spreadsheets, one for each month and information about station, which contain information (including geographic coordinates) was accessed from the [BART stations API](https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y). These datasets were cleaned using Python; imported into a MySQL database; and then converted into interactive plots in a landing page using HTML, CSS, and JavaScript.
 
-1. Your project should fall into one of the below four tracks: 
-	* A custom "creative" D3.js project (i.e. non-standard graph or chart)
+The [project wiki](https://github.com/ryanloney/BART-ridership/wiki) provides a detailed description of how the project has been built. In summary:
+- Back-end
+    - [app.py](https://github.com/ryanloney/BART-ridership/blob/master/app.py) is a Flask app that creates API endpoints accessible to JavaScript and can render content onto the template
+    - [BART-Ridership_data_processing.ipynb](https://github.com/ryanloney/BART-ridership/blob/master/BART-Ridership_data_processing.ipynb) for data cleaning and exporting into a database
+    -[toMySql.sql](https://github.com/ryanloney/BART-ridership/blob/master/toMySql.sql) is the MySQL database used in this project
+    - `config.py` contains the password for MySQL
+- Front-end
+    - templates/[index.html](https://github.com/ryanloney/BART-ridership/blob/master/templates/index.html) is the landing page and template containing text and graphs
+    - static/css/[style.css](https://github.com/ryanloney/BART-ridership/blob/master/static/css/style.css) contains formatting specifications
+    - static/js/[chord.js](https://github.com/ryanloney/BART-ridership/blob/master/static/js/chord.js) renders a chord diagram using the ZingChart library
+    - static/js/[radial.js](https://github.com/ryanloney/BART-ridership/blob/master/static/js/radial.js) renders an interactive bar chart using the amCharts library
+    - static/js/[scatter.js](https://github.com/ryanloney/BART-ridership/blob/master/static/js/scatter.js) renders a map of the counties where BART operates, overlaid with markers corresponding to BART stations
+    - static/js/[config.js] contains the API key for mapbox
 
-	* A combination of Web Scraping and Leaflet or Plotly
-
-	* A dashboard page with multiple charts all updating from the same data
-
-	* A "thick" server that performs multiple manipulations on data in a database prior to visualization (must be approved)
-
-3. Your project should include at least one JS library that we did not cover.
-
-4. Your project must be powered by a dataset with at least 100 records.
-
-5. Your project must include some level of user-driven interaction (e.g. menus, dropdowns, textboxes, etc.)
-
-6. Your final visualization should ideally include at least three views
-
-## Grading Rubrics:
-
-### A:
-Complete all requirements and do something exceptional. Some examples are and contain the following:
-* Having a well organized GitHub Repository, which should include but not limited to:
-    * A good README file which:
-  	  * explains process really well.
-        * has a link to your deliverables.
-        * explains important/main files and folders. 
-    * File names should be easy to understand or pseudocoded so people without data analytics experience can understand. 
-* Creating **creative** visualizations, some examples are:  
-    * [D3 Gallery](https://github.com/d3/d3/wiki/Gallery) \(You don't need to create graphs that are too complex, but try to create unconventional graphs.\)
-    * Maps with filters, layers, and so on.
-    * Anything else creative but not listed here.
-* Creating visualizations and dashboards that are easy to look at and digest(some factors are axis, graphs' layout, colors, themes)
-* All members participate in the delivery of presentation. Presentation tells a story.
-* Anything that's great to have but not listed here.
-
-### B: 
-
-Complete all requirements and:
-* Has a README file.
-* Creating visualizations and dashboards.
-* Delivery of presentation.(both speech and presented materials)
-
-### C or below:
-Fail to complete some of the requirements.
-
-### I:
-Fail to submit the project or fail to deliver the presentation.
-
-## Project description
-This project plots 2018 [BART monthly ridership data](https://www.bart.gov/about/reports/ridership) on a map featuring San Francisco, Alameda, and Contra Costa counties. Each BART station is represented by a marker on the station's coordinates. These coordinates are obtained from the [BART stations API](https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y). Additional information about each station is contained in its tooltip. The map can then be used to glean insights about how commuters use BART.
-
-The [project wiki](https://github.com/ryanloney/BART-ridership/wiki) provides a detailed description of how the project has been built.
