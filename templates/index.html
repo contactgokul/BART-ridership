@@ -7,18 +7,37 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css">
 
+<<<<<<< HEAD
   <!-- amChart script -->
   <script src="https://www.amcharts.com/lib/4/core.js"></script>
   <script src="https://www.amcharts.com/lib/4/charts.js"></script>
   <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+=======
+  <!-- zingChart script -->
+  <script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+	<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];</script>
+>>>>>>> b53e59a630b86f8a0fb7c7d483260b751f4e410e
 
   <!-- Bootstrap script -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+<<<<<<< HEAD
   <!-- Our CSS -->
   <link rel="stylesheet" type="text/css" href="./static/css/style.css">
+=======
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+
+<!-- am4chart scripts -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+>>>>>>> b53e59a630b86f8a0fb7c7d483260b751f4e410e
 </head>
 <body>
+  <!-- Intro Section -->
   <section id = "hero" class = "hero">
     <div class = "container">
       <div class = "row">
@@ -26,14 +45,20 @@
             <h1>{{ title }}</h1>
             <p id = "1">{{ text1 }}</p>
             <p id = "2">{{ text2 }}</p>
+<<<<<<< HEAD
+=======
+            <a href = "#months" class = "btn"><b>Trips by County</b></a>
+            <a href = "#stations" class = "btn"><b>Trips by Month</b></a>
+            <a href = "#leaflet" class = "btn"><b>Map View</b></a>
+>>>>>>> b53e59a630b86f8a0fb7c7d483260b751f4e410e
         </div>
       </div>
     </div>
   </section>
 
-  <!-- The div that holds the map -->
-        <div id="map-id"></div>
+  <hr>
 
+<<<<<<< HEAD
   <section id = "radial_timeline">
     <div class = "container">
       <div class = "row">
@@ -45,7 +70,74 @@
   </section>  
     
   
+=======
+  <!-- Visualisaton #1: Chord chart -->
+  <section class = "choices">
+    <div class = "container">
+      <div class = "row">
+        <div class = "col-md-12" id = "months">
+          <h3>{{ subhead1 }}</h3>
+          <label>{{ label1 }}</label>   <select id = "month_sel"></select>
+          <br>
+          <a href = "#stations" class = "btn"><b>Trips by Month</b></a>
+            <a href = "#leaflet" class = "btn"><b>Map View</b></a>
+        </div>
+      </div>
+    </div>
+  </section>
+>>>>>>> b53e59a630b86f8a0fb7c7d483260b751f4e410e
   
+  <hr>
+  <div id = "chartdiv"></div>
+  <hr>
+
+  <!-- Visualisation #2: Interactive bar graph -->
+  <section class = "choices">
+    <div class = "container">
+      <div class = "row">
+        <div class = "col-md-12" id = "stations">
+          <h3>{{ subhead2 }}</h3>
+          <label>{{ label2 }}</label>
+          <br>
+          <a href = "#months" class = "btn"><b>Trips by County</b></a>
+          <a href = "#leaflet" class = "btn"><b>Map View</b></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+  <div id = "bar"></div>
+  <hr>
+
+  <!-- Visualization #3 Interactive Leaflet map -->
+  <div class="container">
+    <div class="row" >
+        <h3>{{ subhead3 }}</h3>
+      <div class="col-md-4">
+        <div class="well" id = "leaflet">
+          <h5><strong>Select Entry Station and Month to see exit traffic for that station:</strong></h5>
+            <select id="selDataset1" onchange="optionChanged(this.value)"></select>
+            <select id="selDataset2" onchange="optionChanged(this.value)"></select>
+        </div>
+        <br>
+            <a href = "#months" class = "btn"><b>Trips by County</b></a>
+            <a href = "#stations" class = "btn"><b>Trips by Month</b></a>
+      </div>
+      <div class="col-md-8">
+        <h5><b>🚉 Two-Letter Station Code, Station Name </b></h5>
+        <p>{{ stn_names }}</p>
+          
+      </div>
+    </div>
+    <hr>
+    <div class = "row" id="map-location">
+      <div class = "col-md-12">
+          <div id="map-id"></div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- D3 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script>
@@ -55,8 +147,17 @@
 
   <!-- API Key -->
   <script type="text/javascript" src="static/js/config.js"></script>
+<<<<<<< HEAD
   <!-- Our JavaScript -->
   <script type="text/javascript" src="static/js/logic.js"></script>
+=======
+
+  <!-- Custom JavaScript -->
+  <!-- <script type="text/javascript" src="static/js/logic.js"></script> -->
+  <script type="text/javascript" src="static/js/chord.js"></script>
+  <script type="text/javascript" src="static/js/scatter.js"></script>
+  <script type="text/javascript" src="static/js/functions.js"></script>
+>>>>>>> b53e59a630b86f8a0fb7c7d483260b751f4e410e
   <script type="text/javascript" src="static/js/radial.js"></script>
 </body>
 

@@ -4,8 +4,10 @@ body,
   height: 100%;
   padding: 0;
   margin: 0;
+  border: 8px solid white;
 }
 
+<<<<<<< HEAD
 #hero {
   /* Background image */
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(“../img/bart.jpg”);
@@ -16,3 +18,87 @@ body,
   background-size: cover;
   background-attachment: fixed;
 }
+=======
+#chartdiv {
+  width: 100%;
+  height: 100%;
+}
+
+#bar {
+  width: 100%;
+  height: 500px;
+}
+
+.hero {
+  /* Sizing of width (vw) and height (vh) */
+  width: 100vw; 
+  height: 100vh;
+
+  /* Flexbox centering */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Text style */
+  text-align: center;
+  color: white;
+
+  /* Background styles */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../img/bart.jpg");
+  background-size: cover; /* cover entire hero screen */
+  background-position: center center; /* image is centred */
+  background-repeat: no-repeat; /* prevent tiling */
+  background-attachment: fixed; /* image won't move */
+}
+
+.hero h1 {
+  /* Text styling */
+  font-size: 5em;
+
+  /* Margins */
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.hero .btn {
+  /* Positioning and sizing */
+  display: inline-block;
+  width: 200px;
+
+  /* Border style */
+  border: 3px solid gray;
+  border-radius: 20px;
+
+  /* Background styles */
+  background-color: rgb(65, 64, 64);
+
+  /* Padding and margins */
+  padding: 1em;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* Text styles */
+  color: white;
+  text-decoration: none;
+  font-size: 1em;
+}
+
+.btn, .btn:hover {
+  background-color: black;
+  border-color: black;
+
+  /* Text styles */
+  color: white;
+  text-decoration: none;
+}
+
+/* For small screens */
+@media screen and (max-width: 600px) {
+  .hero {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../img/bart.jpg"); 
+      background-repeat: no-repeat; 
+      background-position: center;
+      background-size: cover;
+  }
+>>>>>>> b53e59a630b86f8a0fb7c7d483260b751f4e410e

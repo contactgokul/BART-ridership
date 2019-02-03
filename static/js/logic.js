@@ -8,9 +8,17 @@ function createMap(bartStations) {
     accessToken: API_KEY
   });
 
+  // var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+  //   attribution: "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://mapbox.com\">Mapbox</a>",
+  //   maxZoom: 18,
+  //   id: "mapbox.dark",
+  //   accessToken: API_KEY
+  // });
+
   // Create a baseMaps object to hold the lightmap layer
   var baseMaps = {
     "Light Map": lightmap
+    // "Dark Map": darkmap
   };
 
   // Create an overlayMaps object to hold the bartStations layer
@@ -21,7 +29,7 @@ function createMap(bartStations) {
   // Create the map object with options
   var map = L.map("map-id", {
     center: [37.8037, -122.2714],
-    zoom: 11,
+    zoom: 10.5,
     layers: [lightmap, bartStations]
   });
 
@@ -31,11 +39,10 @@ function createMap(bartStations) {
   }).addTo(map);
 }
 
-function createMarkers(response) {
+function createBartAPIMarkers(response) {
 
   // Pull the "stations" property off of response.data
   var stations = response.root.stations.station;
-  console.log(stations);
 
   // Initialize an array to hold bike markers
   var bartMarkers = [];
@@ -45,12 +52,8 @@ function createMarkers(response) {
     var station = stations[index];
 
     // For each station, create a marker and bind a popup with the station's name
-    var bartMarker = L.circle([station.gtfs_latitude, station.gtfs_longitude], {
-      color: "blue",
-      fillColor: "green",
-      fillOpacity: 0.75,
-      radius: 250
-    }).bindPopup("<h3>" + station.name + "<h3><h3> " + station.abbr + "<h3>");
+    var bartMarker = L.marker([station.gtfs_latitude, station.gtfs_longitude])
+      .bindPopup("<h3>" + station.name + "<h3><h3>Address: " + station.address + "<h3>");
 
     // Add the marker to the bartMarkers array
     bartMarkers.push(bartMarker);
@@ -62,4 +65,5 @@ function createMarkers(response) {
 
 
 // Perform an API call to the BART API to get station information. Call createMarkers when complete
-d3.json("https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y", createMarkers);
+d3.json("https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V&json=y", createBartAPIMarkers);
+// d3.json("/trips/Jan/EM", createMarkers);
