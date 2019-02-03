@@ -11,12 +11,12 @@ The [project wiki](https://github.com/ryanloney/BART-ridership/wiki) provides a 
     - [app.py](https://github.com/ryanloney/BART-ridership/blob/master/app.py) is a Flask app that creates API endpoints accessible to JavaScript and can render content onto the template
     - [BART-Ridership_data_processing.ipynb](https://github.com/ryanloney/BART-ridership/blob/master/BART-Ridership_data_processing.ipynb) for data cleaning and exporting into a database
     -[toMySql.sql](https://github.com/ryanloney/BART-ridership/blob/master/toMySql.sql) is the MySQL database used in this project
-    - `config.py` contains the password for MySQL
+    - `config.py` contains the password for MySQL; see [this guide on how to create this file](https://github.com/ryanloney/BART-ridership/wiki/2.-Data-loading-onto-a-database)
 - Front-end
     - templates/[index.html](https://github.com/ryanloney/BART-ridership/blob/master/templates/index.html) is the landing page and template containing text and graphs
     - static/css/[style.css](https://github.com/ryanloney/BART-ridership/blob/master/static/css/style.css) contains formatting specifications
     - static/js/[chord.js](https://github.com/ryanloney/BART-ridership/blob/master/static/js/chord.js) renders a chord diagram using the ZingChart library
     - static/js/[radial.js](https://github.com/ryanloney/BART-ridership/blob/master/static/js/radial.js) renders an interactive bar chart using the amCharts library
     - static/js/[scatter.js](https://github.com/ryanloney/BART-ridership/blob/master/static/js/scatter.js) renders a map of the counties where BART operates, overlaid with markers corresponding to BART stations
-    - static/js/[config.js] contains the API key for mapbox
+    - static/js/`config.js` contains the API key for mapbox; typically not included in repo so check this guide for creating this file
 
