@@ -6,57 +6,7 @@ am4core.useTheme(am4themes_animated);
 var chart = am4core.create("bar", am4charts.XYChart);
 chart.scrollbarX = new am4core.Scrollbar();
 
-// Add data
-var url = "/trips";
-d3.json(url, function(data){
-    console.log(data[0]);
-
-    // Populate stations
-    data.forEach(function(item) {
-        if (stations.indexOf(item["Entry_Station"]) == -1) {
-            stations.push(item["Entry_Station"]);
-        };
-    });
-    console.log(stations);
-
-    // Define a variable for month selected
-    var entryID = d3.select("#entry_station");
-
-    // Define a variable which lists entryIDs that can be selected
-    var optionsList = [];
-
-    // Populate the list with the Month from each object in the data array
-    data.forEach(function(obj){
-        if (optionsList.indexOf(obj["Entry_Station"]) == -1) {
-            optionsList.push(obj["Entry_Station"]);
-        };
-    });
-    console.log(optionsList);
-
-    // Populate the select field in index.html with the Months
-    var options = entryID
-        .selectAll("#ids")
-        .data(optionsList)
-        .enter()
-        .append("option")
-        .text(function(month) {
-            return month;
-        })
-        .attr("ids", "option")
-
-        // Default is January chord chart
-        createObjects("/trips1");
-
-        // What happens when a month is chosen
-        function handleChange() {
-            var selection = entryID.property("value");
-        
-            // Change the URL to show the selection
-            url1 = `/trips1/${selection}`;
-            createObjects(url1);
-        };
-        entryID.on("change", handleChange);
-});
+var link = "/trips1"; 
 
 function createObjects(link){
     console.log(link);
@@ -66,6 +16,8 @@ function createObjects(link){
         createGraphs(data);
     });
 };
+
+createObjects(link);
 
 function createGraphs(data) {   
     chart.data = data; 
