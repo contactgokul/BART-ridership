@@ -1,10 +1,9 @@
-// Define the
+// Define the global variables
 var url = `/trips`;
 var url1;
-var stations = [];
 var stns;
 
-// Use the new URL to create an object containing months and their trips
+// Use the new URL to create an object containing trips for a specific month
 function createObject(link) {
     console.log(link);
 
@@ -34,14 +33,6 @@ function createGraph(stns) {
 // Use D3 to extract data ZingCharts library to create the graph
 d3.json(url, function(data){
     console.log(data[0]);
-
-    // Populate stations
-    data.forEach(function(item) {
-        if (stations.indexOf(item["Entry_Station"]) == -1) {
-            stations.push(item["Entry_Station"]);
-        };
-    });
-    console.log(stations);
 
     // Define a variable for month selected
     var entryID = d3.select("#month_sel");
